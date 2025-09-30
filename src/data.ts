@@ -1,10 +1,10 @@
 
 export const sponsors = [
-  { id: 1, logo: 'adidas' },
-  { id: 2, logo: 'adidas' },
-  { id: 3, logo: 'adidas' },
-  { id: 4, logo: 'adidas' },
-  { id: 5, logo: 'adidas' },
+  { id: 1, logo: 'https://via.placeholder.com/150' },
+  { id: 2, logo: 'https://via.placeholder.com/150' },
+  { id: 3, logo: 'https://via.placeholder.com/150' },
+  { id: 4, logo: 'https://via.placeholder.com/150' },
+  { id: 5, logo: 'https://via.placeholder.com/150' },
 ];
 
 export const articles = [

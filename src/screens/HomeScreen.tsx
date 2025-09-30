@@ -12,7 +12,7 @@ const HomeScreen = () => {
           data={sponsors}
           renderItem={({ item }) => (
             <View style={styles.sponsorItem}>
-              <Text>{item.logo}</Text>
+              <Image source={{ uri: item.logo }} style={styles.sponsorLogo} />
             </View>
           )}
           keyExtractor={(item) => item.id.toString()}
@@ -57,6 +57,11 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#eee',
     borderRadius: 8,
+  },
+  sponsorLogo: {
+    width: 80,
+    height: 40,
+    resizeMode: 'contain',
   },
   articleItem: {
     flexDirection: 'row',
