@@ -12,18 +12,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import { articles, sponsors, carouselImages } from '../data';
-
-const ACTIONS = [
-  { id: 'teams', label: 'Team\n&\nAthletes', icon: 'account-group-outline' },
-  {
-    id: 'weighin',
-    label: 'Random\nWeigh In',
-    icon: 'human-male-height-variant',
-  },
-  { id: 'draw', label: 'Draw\nList', icon: 'format-list-bulleted' },
-  { id: 'live', label: 'Live\nResults', icon: 'broadcast' },
-  { id: 'moved', label: 'Moved\nMatches', icon: 'swap-horizontal' },
-];
+import QuickActions from '../components/QuickActions';
 
 const DOT_SIZE = 6;
 const { width } = Dimensions.get('window');
@@ -38,22 +27,7 @@ const HomeScreen = ({ onOpenArticle }: HomeScreenProps) => {
   return (
     <View style={styles.container}>
       {/* Top quick actions */}
-      <View style={styles.quickActions}>
-        {ACTIONS.map(a => (
-          <TouchableOpacity
-            key={a.id}
-            style={styles.quickActionItem}
-            activeOpacity={0.7}
-          >
-            <View style={styles.quickIconPlaceholder}>
-              <Icon name={a.icon as any} size={22} color="#333" />
-            </View>
-            <Text style={styles.quickLabel} numberOfLines={2}>
-              {a.label}
-            </Text>
-          </TouchableOpacity>
-        ))}
-      </View>
+      <QuickActions />
 
       {/* Carousel */}
       <View
@@ -140,31 +114,7 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 12,
   },
-  quickActions: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    paddingVertical: 8,
-  },
-  quickActionItem: {
-    width: `${100 / 5}%`,
-    alignItems: 'center',
-  },
-  quickIconPlaceholder: {
-    width: 34,
-    height: 34,
-    borderRadius: 17,
-    backgroundColor: '#efefef',
-    marginBottom: 6,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  quickLabel: {
-    textAlign: 'center',
-    fontSize: 10,
-    color: '#333',
-    lineHeight: 12,
-  },
+
   carouselWrapper: {
     marginTop: 8,
     marginBottom: 12,
