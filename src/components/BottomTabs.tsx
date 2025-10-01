@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-const BottomTabs = ({ activeScreen, onTabPress }) => {
+const BottomTabs = ({ activeScreen, onTabPress }: any) => {
   const tabs = ['Home', 'Schedule', 'Results', 'Watch', 'Tickets'];
 
   const tabIcon = (tab: string) => {
