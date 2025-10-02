@@ -86,3 +86,37 @@ export const scheduleSections: DaySection[] = [
 ];
 
 export const resultsSections: DaySection[] = scheduleSections;
+
+// Tickets mock data
+export type TicketEvent = {
+  id: string;
+  name: string;
+  date: string; // e.g. Sat, 11 Nov · 10:45 AM
+  venue?: string;
+  days: { id: string; label: string; date: string; weekday: string }[];
+};
+
+export const ticketEvents: TicketEvent[] = [
+  {
+    id: 'evt1',
+    name: 'Boxing Match',
+    date: 'Sat, 11 · 10:45 AM',
+    venue: 'Dubai, UAE',
+    days: [
+      { id: 'd1', label: 'Day 1', date: '01 Jan 2025', weekday: 'Monday' },
+      { id: 'd2', label: 'Day 2', date: '02 Jan 2025', weekday: 'Tuesday' },
+      { id: 'd3', label: 'Day 3', date: '03 Jan 2025', weekday: 'Wednesday' },
+      { id: 'd4', label: 'Day 4', date: '04 Jan 2025', weekday: 'Thursday' },
+      { id: 'd5', label: 'Day 5', date: '05 Jan 2025', weekday: 'Friday' },
+      { id: 'd6', label: 'Day 6', date: '06 Jan 2025', weekday: 'Saturday' },
+      { id: 'd7', label: 'Day 7', date: '07 Jan 2025', weekday: 'Sunday' },
+      { id: 'd8', label: 'Day 8', date: '08 Jan 2025', weekday: 'Monday' },
+      { id: 'd9', label: 'Day 9', date: '09 Jan 2025', weekday: 'Tuesday' },
+      { id: 'd10', label: 'Day 10', date: '10 Jan 2025', weekday: 'Wednesday' },
+    ],
+  },
+  { id: 'evt2', name: 'Fight-Night', date: 'Sat, 11 · 10:45 AM', venue: 'Dubai, UAE', days: [] },
+  { id: 'evt3', name: 'The-basketball-game', date: 'Sat, 11 · 10:45 AM', venue: 'Dubai, UAE', days: [] },
+  { id: 'evt4', name: 'the-tennis-match', date: 'Sat, 11 · 10:45 AM', venue: 'Dubai, UAE', days: [] },
+  { id: 'evt5', name: 'the-football-match', date: 'Sat, 11 · 10:45 AM', venue: 'Dubai, UAE', days: [] },
+];

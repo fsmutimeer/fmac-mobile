@@ -10,15 +10,15 @@ export type QuickAction = {
 };
 
 export const DEFAULT_ACTIONS: QuickAction[] = [
-  { id: 'teams', label: 'Team\n&\nAthletes', icon: 'account-group-outline' },
+  { id: 'teams', label: 'Team & Athletes', icon: 'account-group-outline' },
   {
     id: 'weighin',
-    label: 'Random\nWeigh In',
+    label: 'Random Weigh In',
     icon: 'human-male-height-variant',
   },
-  { id: 'draw', label: 'Draw\nList', icon: 'format-list-bulleted' },
-  { id: 'live', label: 'Live\nResults', icon: 'broadcast' },
-  { id: 'moved', label: 'Moved\nMatches', icon: 'swap-horizontal' },
+  { id: 'draw', label: 'Draw List', icon: 'format-list-bulleted' },
+  { id: 'live', label: 'Live Results', icon: 'broadcast' },
+  { id: 'moved', label: 'Moved Matches', icon: 'swap-horizontal' },
 ];
 
 type Props = { actions?: QuickAction[] };
