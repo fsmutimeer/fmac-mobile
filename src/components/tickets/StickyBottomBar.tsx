@@ -4,6 +4,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 type Props = {
   label: string;
+  totalTickets?: number;
   totalLabel: string;
   totalValue: string;
   nextDisabled?: boolean;
@@ -18,6 +19,7 @@ type Props = {
 
 const StickyBottomBar = ({
   label,
+  totalTickets = 0,
   totalLabel,
   totalValue,
   nextDisabled,
@@ -54,8 +56,20 @@ const StickyBottomBar = ({
       <View
         style={[styles.bottomRow, fullWidthButton && { alignItems: 'stretch' }]}
       >
-        <View>
-          <Text style={styles.totalLabel}>{totalLabel}</Text>
+        <View
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            gap: 10,
+            justifyContent: 'center',
+            alignContent: 'center',
+            alignItems: 'center',
+          }}
+        >
+          <View style={{ display: 'flex' }}>
+            <Text style={styles.totalLabel}>{totalLabel}</Text>
+            <Text style={styles.totalTickets}>{totalTickets} tickets</Text>
+          </View>
           <Text style={styles.totalValue}>{totalValue}</Text>
         </View>
         <TouchableOpacity
@@ -107,8 +121,9 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: 6,
   },
-  totalLabel: { fontSize: 10, color: '#666' },
-  totalValue: { fontSize: 16, color: '#ef4444', fontWeight: '900' },
+  totalLabel: { fontSize: 18, color: '#ef4444', fontWeight: '600' },
+  totalTickets: { fontSize: 12, color: '#ef4444', fontWeight: '600' },
+  totalValue: { fontSize: 18, color: '#ef4444', fontWeight: '600' },
   primaryBtn: {
     backgroundColor: '#ef4444',
     paddingHorizontal: 14,

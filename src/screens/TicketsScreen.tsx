@@ -11,7 +11,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import QuickActions from '../components/QuickActions';
 import Back from '../components/Back';
-import ChooseHeader from '../components/tickets/ChooseHeader';
+import ChooseHeader from '../components/tickets/TicketSubHeader';
 import CreateTicketModal, {
   CreateMode as ModalCreateMode,
 } from '../components/tickets/CreateTicketModal';
@@ -22,6 +22,8 @@ import DetailsForm, { TicketDetails } from '../components/tickets/DetailsForm';
 import PaymentForm, { PaymentDetails } from '../components/tickets/PaymentForm';
 import { ticketEvents, TicketEvent } from '../data';
 import SubHeaderHeading from '../components/SubHeading';
+import TicketSubHeader from '../components/tickets/TicketSubHeader';
+import TicketEventNameStrip from '../components/tickets/TicketEventNameStrip';
 
 type Step = 'list' | 'choose' | 'details' | 'payment' | 'done';
 type CreateMode = null | ModalCreateMode;
@@ -138,13 +140,10 @@ const TicketsScreen = () => {
           setStep('list');
         }}
       />
-      <View style={styles.eventStrip}>
-        <Text style={styles.eventStripText}>
-          {selectedEvent?.name ?? 'Name of the event Goes here'}
-        </Text>
-      </View>
+      <TicketEventNameStrip eventName={selectedEvent?.name} />
+      <TicketSubHeader title="Choose tickets" stepText="Step 1/4" />
+
       <ScrollView contentContainerStyle={{ padding: 12, paddingBottom: 220 }}>
-        <ChooseHeader stepText="Step 1/4" />
         <View style={styles.buttonsRow}>
           <TouchableOpacity
             style={styles.redBtn}
@@ -198,6 +197,7 @@ const TicketsScreen = () => {
 
       <StickyBottomBar
         label="Description / Name of the event"
+        totalTickets={basket.length}
         totalLabel="Total"
         totalValue={`$${total.toFixed(2)}`}
         nextDisabled={basket.length === 0}
@@ -216,9 +216,10 @@ const TicketsScreen = () => {
   const renderDetails = () => (
     <View style={{ flex: 1 }}>
       <Back onPress={() => setStep('choose')} />
-      <HeaderBar title={selectedEvent?.name ?? ''} stepText="Step 2/4" />
+      <TicketEventNameStrip eventName={selectedEvent?.name} />
+      <TicketSubHeader title="Add details" stepText="Step 2/4" />
       <ScrollView contentContainerStyle={{ padding: 12, paddingBottom: 120 }}>
-        <Text style={styles.sectionTitle}>Add details</Text>
+        {/* <Text style={styles.sectionTitle}>Add details</Text> */}
         <View
           style={{
             flexDirection: 'row',
@@ -285,9 +286,10 @@ const TicketsScreen = () => {
   const renderPayment = () => (
     <View style={{ flex: 1 }}>
       <Back onPress={() => setStep('details')} />
-      <HeaderBar title={selectedEvent?.name ?? ''} stepText="Step 3/4" />
+      <TicketEventNameStrip eventName={selectedEvent?.name} />
+      <TicketSubHeader title="Payment" stepText="Step 3/4" />
       <ScrollView contentContainerStyle={{ padding: 12, paddingBottom: 120 }}>
-        <Text style={styles.sectionTitle}>Payment</Text>
+        {/* <Text style={styles.sectionTitle}>Payment</Text> */}
         <PaymentForm value={payment} onChange={setPayment} />
       </ScrollView>
       <StickyBottomBar
@@ -304,7 +306,8 @@ const TicketsScreen = () => {
   const renderDone = () => (
     <View style={{ flex: 1 }}>
       <Back onPress={() => setStep('payment')} />
-      <HeaderBar title={selectedEvent?.name ?? ''} stepText="Step 4/4" />
+      <TicketEventNameStrip eventName={selectedEvent?.name} />
+      <TicketSubHeader title="Tickets purchased!" stepText="Step 4/4" />
       <ScrollView contentContainerStyle={{ padding: 12, paddingBottom: 120 }}>
         <Text style={styles.sectionTitle}>Tickets purchased!</Text>
         <Text style={styles.descText}>
@@ -345,12 +348,6 @@ const styles = StyleSheet.create({
     borderBottomColor: '#eee',
   },
 
-  eventStrip: {
-    backgroundColor: '#2D2D2D',
-    paddingVertical: 8,
-    paddingHorizontal: 12,
-  },
-  eventStripText: { color: '#fff', fontSize: 12 },
   headerTitle: { fontSize: 14, fontWeight: '700', color: '#111' },
   headerSub: { fontSize: 11, color: '#777', marginTop: 2 },
   eventCard: {
