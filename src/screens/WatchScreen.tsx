@@ -57,7 +57,10 @@ const WatchScreen = () => {
   return (
     <View style={styles.container}>
       <QuickActions />
-      <Text style={styles.screenTitle}>Watch</Text>
+      <View style={styles.screenWrapper}>
+        <Text style={styles.screenTitle}>Watch</Text>
+        <Icon name="filter" size={30} color="grey" />
+      </View>
       <FlatList
         data={mockStreams}
         keyExtractor={i => i.id}
@@ -93,6 +96,16 @@ const WatchScreen = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff' },
+  screenWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 10,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+    borderTopColor: '#eee',
+  },
   screenTitle: {
     fontSize: 20,
     fontWeight: '700',

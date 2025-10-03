@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import {
   View,
   Text,
@@ -22,7 +22,22 @@ type HomeScreenProps = { onOpenArticle?: (id: number) => void };
 const HomeScreen = ({ onOpenArticle }: HomeScreenProps) => {
   const [activeSlide, setActiveSlide] = useState(0);
   const [carouselWidth, setCarouselWidth] = useState(width);
-  const carouselRef = useRef(null);
+  const carouselRef = useRef<any>(null);
+  const slideIndexRef = useRef(0);
+
+  // Auto-scroll carousel at intervals
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const next = (slideIndexRef.current + 1) % carouselImages.length;
+      slideIndexRef.current = next;
+      carouselRef.current?.scrollTo({
+        x: next * carouselWidth,
+        animated: true,
+      });
+      setActiveSlide(next);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, [carouselWidth]);
 
   return (
     <View style={styles.container}>
@@ -43,7 +58,10 @@ const HomeScreen = ({ onOpenArticle }: HomeScreenProps) => {
             const idx = Math.round(
               e.nativeEvent.contentOffset.x / carouselWidth,
             );
-            if (idx !== activeSlide) setActiveSlide(idx);
+            if (idx !== activeSlide) {
+              slideIndexRef.current = idx;
+              setActiveSlide(idx);
+            }
           }}
           scrollEventThrottle={16}
         >
@@ -96,7 +114,7 @@ const HomeScreen = ({ onOpenArticle }: HomeScreenProps) => {
                 {item.title}
               </Text>
               <View style={styles.dateRow}>
-                <Icon name="calendar" size={14} color="#9A9A9A" />
+                <Icon name="calendar" size={18} color="#9A9A9A" />
                 <Text style={styles.articleDate}>{item.date}</Text>
               </View>
             </View>
@@ -120,12 +138,12 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   carouselSlide: {
-    height: 120,
+    height: 130,
     justifyContent: 'center',
     alignItems: 'center',
   },
   carouselImage: {
-    width: '92%',
+    width: '100%',
     height: '100%',
     borderRadius: 8,
     resizeMode: 'cover',
@@ -172,15 +190,15 @@ const styles = StyleSheet.create({
   },
   articleItem: {
     flexDirection: 'row',
-    paddingVertical: 10,
-    marginBottom: 6,
+    paddingVertical: 5,
+    marginBottom: 3,
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
   },
   articleImage: {
-    width: 64,
+    width: 100,
     height: 64,
-    borderRadius: 8,
+    borderRadius: 4,
     marginRight: 16,
   },
   articleContent: {
@@ -191,13 +209,18 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '700',
     color: '#222',
+    marginBottom: 4,
   },
   articleDate: {
-    marginTop: 4,
     color: '#9A9A9A',
     fontSize: 12,
   },
-  dateRow: { flexDirection: 'row', alignItems: 'center', gap: 6, marginTop: 4 },
+  dateRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    marginTop: 4,
+  },
 });
 
 export default HomeScreen;

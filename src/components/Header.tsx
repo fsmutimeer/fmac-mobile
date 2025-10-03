@@ -37,10 +37,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'space-between',
     width: '100%',
-    paddingHorizontal: 16,
+    paddingHorizontal: 8,
     position: 'relative',
   },
-  leftLogo: { width: 90, height: 28, borderRadius: 6, resizeMode: 'contain' },
+  leftLogo: { width: 100, height: 50, borderRadius: 6, resizeMode: 'contain' },
   centerWrap: {
     position: 'absolute',
     left: 0,
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   },
   centerLogo: {
     width: 140,
-    height: 30,
+    height: 50,
     borderRadius: 8,
     resizeMode: 'contain',
   },

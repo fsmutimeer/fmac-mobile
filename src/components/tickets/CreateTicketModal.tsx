@@ -42,33 +42,43 @@ const CreateTicketModal = ({
           {mode && (
             <View>
               <Text style={styles.title}>Add {mode.kind} ticket</Text>
-              <Text style={styles.sub}>$5 USD per ticket (including TAX)</Text>
-              <View style={styles.qtyRow}>
-                <TouchableOpacity
-                  style={styles.qtyBtn}
-                  onPress={() =>
-                    setMode(m =>
-                      m ? { ...m, qty: Math.max(1, m.qty - 1) } : m,
-                    )
-                  }
-                >
-                  <Icon name="minus" size={16} color="#B91C1C" />
-                </TouchableOpacity>
-                <Text style={styles.qtyVal}>{mode.qty}</Text>
-                <TouchableOpacity
-                  style={styles.qtyBtn}
-                  onPress={() =>
-                    setMode(m => (m ? { ...m, qty: m.qty + 1 } : m))
-                  }
-                >
-                  <Icon name="plus" size={16} color="#B91C1C" />
-                </TouchableOpacity>
+              <Text style={styles.eventName}>{event?.name}</Text>
+              <View style={styles.eventMeta}>
+                <View>
+                  <Text style={styles.modeTitle}>{mode?.kind} ticket</Text>
+                  <Text style={styles.sub}>
+                    $5 USD per ticket (including TAX)
+                  </Text>
+                </View>
+
+                <View style={styles.qtyRow}>
+                  <TouchableOpacity
+                    style={styles.qtyBtn}
+                    onPress={() =>
+                      setMode(m =>
+                        m ? { ...m, qty: Math.max(1, m.qty - 1) } : m,
+                      )
+                    }
+                  >
+                    <Icon name="minus" size={16} color="#fff" />
+                  </TouchableOpacity>
+                  <Text style={styles.qtyVal}>{mode.qty}</Text>
+                  <TouchableOpacity
+                    style={styles.qtyBtn}
+                    onPress={() =>
+                      setMode(m => (m ? { ...m, qty: m.qty + 1 } : m))
+                    }
+                  >
+                    <Icon name="plus" size={16} color="#fff" />
+                  </TouchableOpacity>
+                </View>
               </View>
               <Text style={styles.daysLabel}>
                 Please tap on the day to select
               </Text>
               <Text style={styles.daysPrice}>
-                Select Days $5 per day (including TAX)
+                <Text style={styles.daysPriceText}>Select Days</Text> $5 per day
+                (including TAX)
               </Text>
               <View style={{ marginTop: 6 }}>
                 {event?.days.map(d => {
@@ -100,23 +110,38 @@ const CreateTicketModal = ({
                           selected && styles.dayDateSelected,
                         ]}
                       >
-                        {d.date} · {d.weekday}
+                        {d.date} - {d.weekday}
                       </Text>
                     </TouchableOpacity>
                   );
                 })}
               </View>
               <View style={styles.footerRow}>
-                <View>
-                  <Text style={styles.totalLabel}>Total</Text>
-                  <Text style={styles.totalValue}>
-                    $
-                    {(
-                      mode.qty *
-                      5 *
-                      Math.max(1, mode.selectedDayIds.size)
-                    ).toFixed(2)}
-                  </Text>
+                <View
+                  style={{
+                    gap: 12,
+                    display: 'flex',
+                    flexDirection: 'row',
+                    margin: 2,
+                  }}
+                >
+                  <View style={{}}>
+                    <Text style={styles.totalLabel}>Total</Text>
+                    <Text style={styles.totalTicketa}>{mode.qty} tickets</Text>
+                  </View>
+                  <View>
+                    <Text style={styles.totalValue}>
+                      $
+                      {(
+                        mode.qty *
+                        5 *
+                        Math.max(1, mode.selectedDayIds.size)
+                      ).toFixed(2)}
+                    </Text>
+                    <Text style={styles.totalTicketDays}>
+                      {mode.selectedDayIds.size} days
+                    </Text>
+                  </View>
                 </View>
                 <TouchableOpacity style={styles.primaryBtn} onPress={onCommit}>
                   <Text style={styles.primaryBtnText}>Add ticket</Text>
@@ -144,7 +169,37 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: '#e5e7eb',
   },
-  title: { fontSize: 16, fontWeight: '800', color: '#111' },
+  title: { fontSize: 18, fontWeight: '800', color: '#111' },
+  eventMeta: {
+    // backgroundColor: '#F3F4F7',
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 8,
+    borderRadius: 6,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+
+    borderTopWidth: 1,
+    borderTopColor: '#eee',
+  },
+
+  modeTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#111',
+    textTransform: 'capitalize',
+  },
+  eventName: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#111',
+
+    paddingBottom: 4,
+    marginBottom: 4,
+    marginTop: 4,
+  },
   sub: { fontSize: 10, color: '#ef4444', marginTop: 2 },
   qtyRow: {
     flexDirection: 'row',
@@ -156,15 +211,16 @@ const styles = StyleSheet.create({
     width: 28,
     height: 28,
     borderRadius: 14,
-    backgroundColor: '#fff',
+    backgroundColor: '#ef4444',
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 1,
-    borderColor: '#ef4444',
+    borderColor: '#fff',
   },
   qtyVal: { fontSize: 16, fontWeight: '800', color: '#111' },
   daysLabel: { fontSize: 12, color: '#444', marginTop: 12 },
   daysPrice: { fontSize: 10, color: '#ef4444', marginTop: 2 },
+  daysPriceText: { fontSize: 10, color: '#111', fontWeight: '600' },
   dayRow: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -186,8 +242,10 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: 12,
   },
-  totalLabel: { fontSize: 10, color: '#666' },
-  totalValue: { fontSize: 16, color: '#ef4444', fontWeight: '900' },
+  totalLabel: { fontSize: 16, color: '#ef4444', fontWeight: '600' },
+  totalTicketa: { fontSize: 12, color: '#ef4444', fontWeight: '400' },
+  totalTicketDays: { fontSize: 12, color: '#ef4444', fontWeight: '400' },
+  totalValue: { fontSize: 16, color: '#ef4444', fontWeight: '600' },
   primaryBtn: {
     backgroundColor: '#ef4444',
     paddingHorizontal: 14,

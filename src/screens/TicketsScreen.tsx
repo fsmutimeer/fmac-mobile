@@ -18,6 +18,8 @@ import CreateTicketModal, {
 import BasketTable from '../components/tickets/BasketTable';
 import EventDescriptionCard from '../components/tickets/EventDescriptionCard';
 import StickyBottomBar from '../components/tickets/StickyBottomBar';
+import DetailsForm, { TicketDetails } from '../components/tickets/DetailsForm';
+import PaymentForm, { PaymentDetails } from '../components/tickets/PaymentForm';
 import { ticketEvents, TicketEvent } from '../data';
 
 type Step = 'list' | 'choose' | 'details' | 'payment' | 'done';
@@ -34,6 +36,17 @@ const TicketsScreen = () => {
     () => basket.reduce((s, b) => s + b.qty * b.price, 0),
     [basket],
   );
+
+  const [details, setDetails] = useState<TicketDetails[]>([
+    { firstName: '', lastName: '', email: '', contactNumber: '' },
+    { firstName: '', lastName: '', email: '', contactNumber: '' },
+  ]);
+  const [payment, setPayment] = useState<PaymentDetails>({
+    cardNumber: '',
+    cardName: '',
+    expDate: '',
+    cvv: '',
+  });
 
   const toChoose = (evt: TicketEvent) => {
     setSelectedEvent(evt);
@@ -87,7 +100,10 @@ const TicketsScreen = () => {
   const renderList = () => (
     <View style={{ flex: 1 }}>
       <QuickActions />
-      <HeaderBar title="Tickets" />
+      <View style={styles.screenWrapper}>
+        <Text style={styles.screenTitle}>Tickets</Text>
+        {/* <Icon name="filter" size={30} color="grey" /> */}
+      </View>
       <FlatList
         data={ticketEvents}
         keyExtractor={i => i.id}
@@ -172,18 +188,18 @@ const TicketsScreen = () => {
           description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
         />
 
-        <View style={styles.footerRow}>
-          <View>
+        {/* <View style={styles.footerRow}> */}
+        {/* <View>
             <Text style={styles.totalLabel}>Total</Text>
             <Text style={styles.totalValue}>${total.toFixed(2)}</Text>
-          </View>
-          <TouchableOpacity
+          </View> */}
+        {/* <TouchableOpacity
             style={styles.primaryBtn}
             onPress={() => setStep('details')}
-          >
-            <Text style={styles.primaryBtnText}>Next</Text>
-          </TouchableOpacity>
-        </View>
+          > */}
+        {/* <Text style={styles.primaryBtnText}>Next</Text>
+          </TouchableOpacity> */}
+        {/* </View> */}
       </ScrollView>
 
       <StickyBottomBar
@@ -202,15 +218,19 @@ const TicketsScreen = () => {
       <HeaderBar title={selectedEvent?.name ?? ''} stepText="Step 2/4" />
       <ScrollView contentContainerStyle={{ padding: 12 }}>
         <Text style={styles.sectionTitle}>Add details</Text>
-        {[1, 2].map(n => (
-          <View key={n} style={styles.formCard}>
-            <Text style={styles.formTitle}>Adult ticket #{n}</Text>
-            {['First name', 'Last name', 'Email', 'Contact number'].map(ph => (
-              <View key={ph} style={styles.inputMock}>
-                <Text style={styles.inputPlaceholder}>{ph}</Text>
-              </View>
-            ))}
-          </View>
+        {details.map((d, idx) => (
+          <DetailsForm
+            key={idx}
+            title={`Adult ticket #${idx + 1}`}
+            value={d}
+            onChange={next =>
+              setDetails(prev => {
+                const copy = [...prev];
+                copy[idx] = next;
+                return copy;
+              })
+            }
+          />
         ))}
         <View style={styles.footerRow}>
           <View>
@@ -234,11 +254,7 @@ const TicketsScreen = () => {
       <HeaderBar title={selectedEvent?.name ?? ''} stepText="Step 3/4" />
       <ScrollView contentContainerStyle={{ padding: 12 }}>
         <Text style={styles.sectionTitle}>Payment</Text>
-        {['Card number', 'Name of the card', 'Exp date     CVV'].map(ph => (
-          <View key={ph} style={styles.inputMock}>
-            <Text style={styles.inputPlaceholder}>{ph}</Text>
-          </View>
-        ))}
+        <PaymentForm value={payment} onChange={setPayment} />
         <View style={styles.footerRow}>
           <View>
             <Text style={styles.totalLabel}>Total</Text>
@@ -296,6 +312,24 @@ const styles = StyleSheet.create({
     padding: 12,
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
+  },
+  screenWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 10,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+    borderTopColor: '#eee',
+  },
+  screenTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#222',
+    paddingHorizontal: 16,
+    paddingTop: 12,
+    paddingBottom: 8,
   },
   eventStrip: {
     backgroundColor: '#2D2D2D',

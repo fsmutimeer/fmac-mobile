@@ -78,7 +78,7 @@ const ArticleScreen = ({
 
         <Text style={styles.title}>{article.title}</Text>
         <View style={styles.dateRow}>
-          <Icon name="calendar" size={14} color="#9A9A9A" />
+          <Icon name="calendar" size={18} color="#9A9A9A" />
           <Text style={styles.date}>{article.date}</Text>
         </View>
         <Text style={styles.body}>{article.body}</Text>
@@ -102,8 +102,8 @@ const styles = StyleSheet.create({
     marginBottom: 12,
   },
   heroImage: {
-    width: '70%',
-    height: 110,
+    width: '100%',
+    height: 170,
     borderRadius: 8,
     resizeMode: 'cover',
   },
@@ -136,7 +136,7 @@ const styles = StyleSheet.create({
   },
   date: {
     color: '#9A9A9A',
-    marginBottom: 10,
+    marginBottom: 2,
   },
   dateRow: {
     flexDirection: 'row',

@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'flex-start',
     paddingVertical: 8,
-    paddingHorizontal: 12,
+    paddingHorizontal: 4,
   },
   quickActionItem: { width: `${100 / 5}%`, alignItems: 'center' },
   quickIconPlaceholder: {

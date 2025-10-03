@@ -42,8 +42,8 @@ const ScheduleScreen = () => {
         <View style={styles.sectionHeaderLeft}>
           <Text style={styles.dayNum}>{section.dayNum}</Text>
           <View style={{ marginLeft: 8 }}>
-            <Text style={styles.dayName}>{section.dayName}</Text>
             <Text style={styles.monthText}>October 2024</Text>
+            <Text style={styles.dayName}>{section.dayName}</Text>
           </View>
         </View>
         <TouchableOpacity onPress={() => toggleSection(section.dateKey)}>
@@ -95,7 +95,10 @@ const ScheduleScreen = () => {
   return (
     <View style={styles.container}>
       <QuickActions />
-      <Text style={styles.screenTitle}>Schedule</Text>
+      <View style={styles.screenWrapper}>
+        <Text style={styles.screenTitle}>Schedule</Text>
+        <Icon name="filter" size={30} color="grey" />
+      </View>
       <SectionList
         sections={sections}
         keyExtractor={item => item.id}
@@ -111,6 +114,16 @@ const ScheduleScreen = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff' },
+  screenWrapper: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 10,
+    borderTopWidth: 1,
+    borderBottomWidth: 1,
+    borderBottomColor: '#eee',
+    borderTopColor: '#eee',
+  },
   screenTitle: {
     fontSize: 20,
     fontWeight: '700',
@@ -127,8 +140,13 @@ const styles = StyleSheet.create({
   },
   sectionHeaderLeft: { flexDirection: 'row', alignItems: 'center' },
   dayNum: { fontSize: 22, fontWeight: '900', color: '#111' },
-  dayName: { fontSize: 12, fontWeight: '600', color: '#111' },
-  monthText: { fontSize: 10, color: '#666', marginTop: 2 },
+  dayName: {
+    fontSize: 10,
+    fontWeight: '600',
+    color: '#666',
+    fontStyle: 'italic',
+  },
+  monthText: { fontSize: 12, fontWeight: '600', color: '#111', marginTop: 2 },
   card: {
     flexDirection: 'row',
     alignItems: 'center',
