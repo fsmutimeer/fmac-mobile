@@ -19,7 +19,6 @@ const styles = StyleSheet.create({
     borderColor: '#eee',
     borderRadius: 8,
     padding: 12,
-    marginTop: 8,
   },
   title: { fontSize: 12, fontWeight: '700', color: '#111', marginBottom: 6 },
   text: { fontSize: 12, color: '#555', lineHeight: 18 },

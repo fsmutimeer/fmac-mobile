@@ -20,10 +20,10 @@ const styles = StyleSheet.create({
     backgroundColor: '#F3F4F6',
     borderRadius: 8,
     paddingVertical: 10,
-    paddingHorizontal: 12,
+    paddingHorizontal: 1,
     marginBottom: 8,
   },
-  title: { fontSize: 14, fontWeight: '800', color: '#111' },
+  title: { fontSize: 16, fontWeight: '800', color: '#111' },
   step: { fontSize: 11, color: '#777' },
 });
 

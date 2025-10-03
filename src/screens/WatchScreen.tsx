@@ -10,6 +10,7 @@ import {
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import QuickActions from '../components/QuickActions';
+import SubHeaderHeading from '../components/SubHeading';
 
 const { width } = Dimensions.get('window');
 
@@ -57,10 +58,7 @@ const WatchScreen = () => {
   return (
     <View style={styles.container}>
       <QuickActions />
-      <View style={styles.screenWrapper}>
-        <Text style={styles.screenTitle}>Watch</Text>
-        <Icon name="filter" size={30} color="grey" />
-      </View>
+      <SubHeaderHeading title="Watch" filter={true} />
       <FlatList
         data={mockStreams}
         keyExtractor={i => i.id}
@@ -96,23 +94,6 @@ const WatchScreen = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff' },
-  screenWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: 10,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-    borderTopColor: '#eee',
-  },
-  screenTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#222',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-  },
   card: { width: CARD_WIDTH },
   cardTitle: { fontSize: 14, fontWeight: '700', color: '#111' },
   cardSubtitle: { fontSize: 12, color: '#666', marginBottom: 8 },

@@ -21,6 +21,7 @@ import StickyBottomBar from '../components/tickets/StickyBottomBar';
 import DetailsForm, { TicketDetails } from '../components/tickets/DetailsForm';
 import PaymentForm, { PaymentDetails } from '../components/tickets/PaymentForm';
 import { ticketEvents, TicketEvent } from '../data';
+import SubHeaderHeading from '../components/SubHeading';
 
 type Step = 'list' | 'choose' | 'details' | 'payment' | 'done';
 type CreateMode = null | ModalCreateMode;
@@ -32,6 +33,7 @@ const TicketsScreen = () => {
   const [selectedEvent, setSelectedEvent] = useState<TicketEvent | null>(null);
   const [basket, setBasket] = useState<BasketItem[]>([]);
   const [createMode, setCreateMode] = useState<CreateMode>(null);
+  const [descOpen, setDescOpen] = useState(false);
   const total = useMemo(
     () => basket.reduce((s, b) => s + b.qty * b.price, 0),
     [basket],
@@ -41,6 +43,7 @@ const TicketsScreen = () => {
     { firstName: '', lastName: '', email: '', contactNumber: '' },
     { firstName: '', lastName: '', email: '', contactNumber: '' },
   ]);
+  const [sameForAll, setSameForAll] = useState(false);
   const [payment, setPayment] = useState<PaymentDetails>({
     cardNumber: '',
     cardName: '',
@@ -91,7 +94,6 @@ const TicketsScreen = () => {
     <View style={styles.headerBar}>
       <View style={{ flex: 1 }}>
         <Text style={styles.headerTitle}>{title}</Text>
-        {stepText ? <Text style={styles.headerSub}>{stepText}</Text> : null}
       </View>
       {stepText ? <Text style={styles.stepRight}>{stepText}</Text> : null}
     </View>
@@ -100,10 +102,7 @@ const TicketsScreen = () => {
   const renderList = () => (
     <View style={{ flex: 1 }}>
       <QuickActions />
-      <View style={styles.screenWrapper}>
-        <Text style={styles.screenTitle}>Tickets</Text>
-        {/* <Icon name="filter" size={30} color="grey" /> */}
-      </View>
+      <SubHeaderHeading title="Tickets" filter={false} />
       <FlatList
         data={ticketEvents}
         keyExtractor={i => i.id}
@@ -144,7 +143,7 @@ const TicketsScreen = () => {
           {selectedEvent?.name ?? 'Name of the event Goes here'}
         </Text>
       </View>
-      <ScrollView contentContainerStyle={{ padding: 12, paddingBottom: 120 }}>
+      <ScrollView contentContainerStyle={{ padding: 12, paddingBottom: 220 }}>
         <ChooseHeader stepText="Step 1/4" />
         <View style={styles.buttonsRow}>
           <TouchableOpacity
@@ -183,11 +182,6 @@ const TicketsScreen = () => {
 
         <BasketTable items={basket} onRemove={removeItem} />
 
-        <EventDescriptionCard
-          title="Name Of The Event"
-          description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
-        />
-
         {/* <View style={styles.footerRow}> */}
         {/* <View>
             <Text style={styles.totalLabel}>Total</Text>
@@ -204,11 +198,18 @@ const TicketsScreen = () => {
 
       <StickyBottomBar
         label="Description / Name of the event"
-        totalLabel="Total tickets"
+        totalLabel="Total"
         totalValue={`$${total.toFixed(2)}`}
         nextDisabled={basket.length === 0}
         onNext={() => setStep('details')}
-      />
+        expanded={descOpen}
+        onToggle={() => setDescOpen(prev => !prev)}
+      >
+        <EventDescriptionCard
+          title="Name Of The Event"
+          description="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat."
+        />
+      </StickyBottomBar>
     </View>
   );
 
@@ -216,35 +217,68 @@ const TicketsScreen = () => {
     <View style={{ flex: 1 }}>
       <Back onPress={() => setStep('choose')} />
       <HeaderBar title={selectedEvent?.name ?? ''} stepText="Step 2/4" />
-      <ScrollView contentContainerStyle={{ padding: 12 }}>
+      <ScrollView contentContainerStyle={{ padding: 12, paddingBottom: 120 }}>
         <Text style={styles.sectionTitle}>Add details</Text>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            marginTop: 8,
+          }}
+        >
+          <Text style={{ fontSize: 12, color: '#444' }}>
+            Use same details for all tickets
+          </Text>
+          <TouchableOpacity
+            onPress={() => {
+              setSameForAll(prev => !prev);
+              setDetails(prev => prev.map(() => prev[0]));
+            }}
+            style={{
+              width: 20,
+              height: 20,
+              borderRadius: 4,
+              borderWidth: 1,
+              borderColor: '#9ca3af',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            {sameForAll ? (
+              <Icon name="check" size={14} color="#ef4444" />
+            ) : null}
+          </TouchableOpacity>
+        </View>
         {details.map((d, idx) => (
           <DetailsForm
             key={idx}
             title={`Adult ticket #${idx + 1}`}
+            dayLabels={[
+              'Day 1 01 Jan',
+              'Day 2 01 Jan',
+              'Day 3 01 Jan',
+              'Day 4 01 Jan',
+            ]}
             value={d}
             onChange={next =>
               setDetails(prev => {
                 const copy = [...prev];
                 copy[idx] = next;
+                if (sameForAll) return copy.map(() => next);
                 return copy;
               })
             }
           />
         ))}
-        <View style={styles.footerRow}>
-          <View>
-            <Text style={styles.totalLabel}>Total</Text>
-            <Text style={styles.totalValue}>${total.toFixed(2)}</Text>
-          </View>
-          <TouchableOpacity
-            style={styles.primaryBtn}
-            onPress={() => setStep('payment')}
-          >
-            <Text style={styles.primaryBtnText}>Next</Text>
-          </TouchableOpacity>
-        </View>
       </ScrollView>
+      <StickyBottomBar
+        label=""
+        totalLabel="Total"
+        totalValue={`$${total.toFixed(2)}`}
+        onNext={() => setStep('payment')}
+        hideToggle
+      />
     </View>
   );
 
@@ -252,22 +286,18 @@ const TicketsScreen = () => {
     <View style={{ flex: 1 }}>
       <Back onPress={() => setStep('details')} />
       <HeaderBar title={selectedEvent?.name ?? ''} stepText="Step 3/4" />
-      <ScrollView contentContainerStyle={{ padding: 12 }}>
+      <ScrollView contentContainerStyle={{ padding: 12, paddingBottom: 120 }}>
         <Text style={styles.sectionTitle}>Payment</Text>
         <PaymentForm value={payment} onChange={setPayment} />
-        <View style={styles.footerRow}>
-          <View>
-            <Text style={styles.totalLabel}>Total</Text>
-            <Text style={styles.totalValue}>${total.toFixed(2)}</Text>
-          </View>
-          <TouchableOpacity
-            style={styles.primaryBtn}
-            onPress={() => setStep('done')}
-          >
-            <Text style={styles.primaryBtnText}>Check out</Text>
-          </TouchableOpacity>
-        </View>
       </ScrollView>
+      <StickyBottomBar
+        label=""
+        totalLabel="Total"
+        totalValue={`$${total.toFixed(2)}`}
+        nextLabel="Check out"
+        onNext={() => setStep('done')}
+        hideToggle
+      />
     </View>
   );
 
@@ -275,21 +305,22 @@ const TicketsScreen = () => {
     <View style={{ flex: 1 }}>
       <Back onPress={() => setStep('payment')} />
       <HeaderBar title={selectedEvent?.name ?? ''} stepText="Step 4/4" />
-      <ScrollView contentContainerStyle={{ padding: 12 }}>
+      <ScrollView contentContainerStyle={{ padding: 12, paddingBottom: 120 }}>
         <Text style={styles.sectionTitle}>Tickets purchased!</Text>
         <Text style={styles.descText}>
           Your tickets have been successfully purchased. You can download here
           or find them in your email.
         </Text>
-        <TouchableOpacity
-          style={[
-            styles.primaryBtn,
-            { alignSelf: 'flex-start', marginTop: 16 },
-          ]}
-        >
-          <Text style={styles.primaryBtnText}>Download tickets</Text>
-        </TouchableOpacity>
       </ScrollView>
+      <StickyBottomBar
+        label=""
+        totalLabel=""
+        totalValue={''}
+        nextLabel="Download tickets"
+        onNext={() => {}}
+        hideToggle
+        fullWidthButton
+      />
     </View>
   );
 
@@ -313,24 +344,7 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#eee',
   },
-  screenWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: 10,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-    borderTopColor: '#eee',
-  },
-  screenTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#222',
-    paddingHorizontal: 16,
-    paddingTop: 12,
-    paddingBottom: 8,
-  },
+
   eventStrip: {
     backgroundColor: '#2D2D2D',
     paddingVertical: 8,
@@ -384,8 +398,8 @@ const styles = StyleSheet.create({
   chooseHeaderTitle: { fontSize: 14, fontWeight: '800', color: '#111' },
   buttonsRow: {
     flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 10,
+    justifyContent: 'space-between',
+    gap: 6,
     marginBottom: 10,
   },
   smallBtn: {
@@ -401,7 +415,12 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     borderRadius: 6,
   },
-  redBtnText: { color: '#fff', fontSize: 11, fontWeight: '700' },
+  redBtnText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '700',
+    paddingHorizontal: 12,
+  },
   createCard: {
     backgroundColor: '#fff',
     borderRadius: 10,

@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, TextInput, StyleSheet } from 'react-native';
+import { View, Text, TextInput, StyleSheet, ScrollView } from 'react-native';
 
 export type TicketDetails = {
   firstName: string;
@@ -12,12 +12,28 @@ type Props = {
   title: string;
   value: TicketDetails;
   onChange: (next: TicketDetails) => void;
+  dayLabels?: string[];
 };
 
-const DetailsForm = ({ title, value, onChange }: Props) => {
+const DetailsForm = ({ title, value, onChange, dayLabels = [] }: Props) => {
   return (
     <View style={styles.card}>
       <Text style={styles.title}>{title}</Text>
+      {dayLabels.length > 0 ? (
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          style={{ marginBottom: 6 }}
+        >
+          <View style={styles.daysRow}>
+            {dayLabels.map((d, i) => (
+              <View key={`${d}-${i}`} style={styles.dayChip}>
+                <Text style={styles.dayChipText}>{d}</Text>
+              </View>
+            ))}
+          </View>
+        </ScrollView>
+      ) : null}
       <TextInput
         style={styles.input}
         placeholder="First name"
@@ -63,6 +79,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   title: { fontSize: 12, color: '#444', marginBottom: 6, fontWeight: '700' },
+  daysRow: { flexDirection: 'row', gap: 6 },
+  dayChip: {
+    backgroundColor: '#F3F4F6',
+    borderRadius: 6,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
+    marginRight: 6,
+  },
+  dayChipText: { fontSize: 10, color: '#444', fontWeight: '700' },
   input: {
     borderWidth: 1,
     borderColor: '#e5e7eb',

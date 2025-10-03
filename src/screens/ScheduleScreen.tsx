@@ -9,6 +9,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { scheduleSections, DaySection } from '../data';
 import QuickActions from '../components/QuickActions';
+import SubHeaderHeading from '../components/SubHeading';
 
 type ScheduleItem = {
   id: string;
@@ -95,10 +96,7 @@ const ScheduleScreen = () => {
   return (
     <View style={styles.container}>
       <QuickActions />
-      <View style={styles.screenWrapper}>
-        <Text style={styles.screenTitle}>Schedule</Text>
-        <Icon name="filter" size={30} color="grey" />
-      </View>
+      <SubHeaderHeading title="Schedule" filter={true} />
       <SectionList
         sections={sections}
         keyExtractor={item => item.id}
@@ -114,24 +112,6 @@ const ScheduleScreen = () => {
 
 const styles = StyleSheet.create({
   container: { flex: 1, backgroundColor: '#fff' },
-  screenWrapper: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    paddingVertical: 10,
-    borderTopWidth: 1,
-    borderBottomWidth: 1,
-    borderBottomColor: '#eee',
-    borderTopColor: '#eee',
-  },
-  screenTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#222',
-    paddingHorizontal: 16,
-    paddingTop: 12,
-    paddingBottom: 8,
-  },
   sectionHeaderWrap: {
     flexDirection: 'row',
     alignItems: 'center',

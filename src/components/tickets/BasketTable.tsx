@@ -26,11 +26,14 @@ const BasketTable = ({ items, onRemove }: Props) => {
       </View>
       {items.map((b, idx) => (
         <View key={b.id} style={styles.row}>
-          <Text style={[styles.cell, { flex: 1 }]}>{idx + 1}</Text>
-          <View style={{ flex: 3 }}>
+          <Text style={[styles.cell, { flex: 1 }]}>{idx + 1}. </Text>
+          <View style={{ flex: 7, backgroundColor: '' }}>
             <Text style={styles.cellStrong}>{b.label}</Text>
             <Text style={styles.cellNote}>
-              ${b.price.toFixed(2)} · {b.qty}x
+              <Text style={{ color: '#ef4444', fontWeight: '600' }}>
+                ${b.price.toFixed(2)}{' '}
+              </Text>{' '}
+              {b.qty} days
             </Text>
           </View>
           <View style={{ width: 60, alignItems: 'flex-end' }}>
@@ -52,13 +55,13 @@ const BasketTable = ({ items, onRemove }: Props) => {
 const styles = StyleSheet.create({
   headerRow: {
     flexDirection: 'row',
-    backgroundColor: '#f3f4f6',
+    backgroundColor: '#000',
     borderRadius: 8,
     paddingVertical: 8,
     paddingHorizontal: 12,
     marginBottom: 6,
   },
-  headerText: { fontSize: 11, color: '#666', fontWeight: '700' },
+  headerText: { fontSize: 11, color: '#fff', fontWeight: '700' },
   row: {
     flexDirection: 'row',
     alignItems: 'center',
@@ -68,6 +71,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 12,
     marginBottom: 8,
   },
+
   cell: { fontSize: 12, color: '#444' },
   cellStrong: { fontSize: 12, color: '#111', fontWeight: '700' },
   cellNote: { fontSize: 11, color: '#666' },
