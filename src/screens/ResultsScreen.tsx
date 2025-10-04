@@ -24,7 +24,7 @@ type ResultSection = {
   data: ResultItem[];
 };
 
-const ResultsScreen = () => {
+const ResultsScreen = ({ onOpenTeams }: { onOpenTeams?: () => void }) => {
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
 
   const sections = useMemo<ResultSection[]>(
@@ -94,7 +94,24 @@ const ResultsScreen = () => {
 
   return (
     <View style={styles.container}>
-      <QuickActions />
+      <QuickActions
+        actions={[
+          {
+            id: 'teams',
+            label: 'Team & Athletes',
+            icon: 'account-group-outline',
+            onPress: onOpenTeams,
+          },
+          {
+            id: 'weighin',
+            label: 'Random Weigh In',
+            icon: 'human-male-height-variant',
+          },
+          { id: 'draw', label: 'Draw List', icon: 'format-list-bulleted' },
+          { id: 'live', label: 'Live Results', icon: 'broadcast' },
+          { id: 'moved', label: 'Moved Matches', icon: 'swap-horizontal' },
+        ]}
+      />
       <SubHeaderHeading title="Result" filter={true} />
       <SectionList
         sections={sections}

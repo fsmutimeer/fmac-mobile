@@ -11,7 +11,7 @@ const Back = ({ label = 'Back', onPress }: Props) => {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.row} onPress={onPress}>
-        <Icon name="chevron-left" size={22} color="#333" />
+        <Icon name="chevron-left" size={26} color="#333" />
         <Text style={styles.text}>{label}</Text>
       </TouchableOpacity>
     </View>
@@ -27,7 +27,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
   },
   row: { flexDirection: 'row', alignItems: 'center' },
-  text: { marginLeft: 2, fontSize: 13, color: '#111', fontWeight: '700' },
+  text: { marginLeft: 4, fontSize: 16, color: '#111', fontWeight: '700' },
 });
 
 export default Back;

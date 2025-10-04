@@ -36,7 +36,7 @@ type BasketItem = {
   selectedDays?: { id: string; label: string; date: string; weekday: string }[];
 };
 
-const TicketsScreen = () => {
+const TicketsScreen = ({ onOpenTeams }: { onOpenTeams?: () => void }) => {
   const [step, setStep] = useState<Step>('list');
   const [selectedEvent, setSelectedEvent] = useState<TicketEvent | null>(null);
   const [basket, setBasket] = useState<BasketItem[]>([]);
@@ -139,7 +139,24 @@ const TicketsScreen = () => {
 
   const renderList = () => (
     <View style={{ flex: 1 }}>
-      <QuickActions />
+      <QuickActions
+        actions={[
+          {
+            id: 'teams',
+            label: 'Team & Athletes',
+            icon: 'account-group-outline',
+            onPress: onOpenTeams,
+          },
+          {
+            id: 'weighin',
+            label: 'Random Weigh In',
+            icon: 'human-male-height-variant',
+          },
+          { id: 'draw', label: 'Draw List', icon: 'format-list-bulleted' },
+          { id: 'live', label: 'Live Results', icon: 'broadcast' },
+          { id: 'moved', label: 'Moved Matches', icon: 'swap-horizontal' },
+        ]}
+      />
       <SubHeaderHeading title="Tickets" filter={false} />
       <FlatList
         data={ticketEvents}

@@ -54,10 +54,27 @@ const mockStreams: Stream[] = [
 const CARD_GAP = 14;
 const CARD_WIDTH = (width - 16 * 2 - CARD_GAP) / 2;
 
-const WatchScreen = () => {
+const WatchScreen = ({ onOpenTeams }: { onOpenTeams?: () => void }) => {
   return (
     <View style={styles.container}>
-      <QuickActions />
+      <QuickActions
+        actions={[
+          {
+            id: 'teams',
+            label: 'Team & Athletes',
+            icon: 'account-group-outline',
+            onPress: onOpenTeams,
+          },
+          {
+            id: 'weighin',
+            label: 'Random Weigh In',
+            icon: 'human-male-height-variant',
+          },
+          { id: 'draw', label: 'Draw List', icon: 'format-list-bulleted' },
+          { id: 'live', label: 'Live Results', icon: 'broadcast' },
+          { id: 'moved', label: 'Moved Matches', icon: 'swap-horizontal' },
+        ]}
+      />
       <SubHeaderHeading title="Watch" filter={true} />
       <FlatList
         data={mockStreams}

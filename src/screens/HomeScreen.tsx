@@ -17,9 +17,12 @@ import QuickActions from '../components/QuickActions';
 const DOT_SIZE = 6;
 const { width } = Dimensions.get('window');
 
-type HomeScreenProps = { onOpenArticle?: (id: number) => void };
+type HomeScreenProps = {
+  onOpenArticle?: (id: number) => void;
+  onOpenTeams?: () => void;
+};
 
-const HomeScreen = ({ onOpenArticle }: HomeScreenProps) => {
+const HomeScreen = ({ onOpenArticle, onOpenTeams }: HomeScreenProps) => {
   const [activeSlide, setActiveSlide] = useState(0);
   const [carouselWidth, setCarouselWidth] = useState(width);
   const carouselRef = useRef<any>(null);
@@ -42,7 +45,24 @@ const HomeScreen = ({ onOpenArticle }: HomeScreenProps) => {
   return (
     <View style={styles.container}>
       {/* Top quick actions */}
-      <QuickActions />
+      <QuickActions
+        actions={[
+          {
+            id: 'teams',
+            label: 'Team & Athletes',
+            icon: 'account-group-outline',
+            onPress: onOpenTeams,
+          },
+          {
+            id: 'weighin',
+            label: 'Random Weigh In',
+            icon: 'human-male-height-variant',
+          },
+          { id: 'draw', label: 'Draw List', icon: 'format-list-bulleted' },
+          { id: 'live', label: 'Live Results', icon: 'broadcast' },
+          { id: 'moved', label: 'Moved Matches', icon: 'swap-horizontal' },
+        ]}
+      />
 
       {/* Carousel */}
       <View

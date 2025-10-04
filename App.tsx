@@ -9,6 +9,7 @@ import ScheduleScreen from './src/screens/ScheduleScreen';
 import ResultsScreen from './src/screens/ResultsScreen';
 import WatchScreen from './src/screens/WatchScreen';
 import TicketsScreen from './src/screens/TicketsScreen';
+import TeamAndAthletesScreen from './src/screens/TeamAndAthletesScreen';
 import ArticleScreen from './src/screens/ArticleScreen';
 import { articles } from './src/data';
 
@@ -16,8 +17,21 @@ function App() {
   const isDarkMode = useColorScheme() === 'dark';
   const [activeScreen, setActiveScreen] = useState('Home');
   const [articleIndex, setArticleIndex] = useState<number | null>(null);
+  const [showTeams, setShowTeams] = useState(false);
+
+  const handleTabPress = (tab: string) => {
+    if (showTeams) {
+      // If Teams overlay is active, close it and switch to the selected tab
+      setShowTeams(false);
+    }
+    setActiveScreen(tab);
+  };
 
   const renderScreen = () => {
+    if (showTeams) {
+      return <TeamAndAthletesScreen onBack={() => setShowTeams(false)} />;
+    }
+
     switch (activeScreen) {
       case 'Home':
         return (
@@ -27,16 +41,17 @@ function App() {
               setArticleIndex(idx < 0 ? 0 : idx);
               setActiveScreen('Article');
             }}
+            onOpenTeams={() => setShowTeams(true)}
           />
         );
       case 'Schedule':
-        return <ScheduleScreen />;
+        return <ScheduleScreen onOpenTeams={() => setShowTeams(true)} />;
       case 'Results':
-        return <ResultsScreen />;
+        return <ResultsScreen onOpenTeams={() => setShowTeams(true)} />;
       case 'Watch':
-        return <WatchScreen />;
+        return <WatchScreen onOpenTeams={() => setShowTeams(true)} />;
       case 'Tickets':
-        return <TicketsScreen />;
+        return <TicketsScreen onOpenTeams={() => setShowTeams(true)} />;
       case 'Article':
         return (
           <ArticleScreen
@@ -56,7 +71,7 @@ function App() {
         <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
         <Header />
         <View style={styles.mainContent}>{renderScreen()}</View>
-        <BottomTabs activeScreen={activeScreen} onTabPress={setActiveScreen} />
+        <BottomTabs activeScreen={activeScreen} onTabPress={handleTabPress} />
       </SafeAreaView>
     </SafeAreaProvider>
   );

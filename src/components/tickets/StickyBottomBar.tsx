@@ -98,7 +98,8 @@ const styles = StyleSheet.create({
     left: 0,
     right: 0,
     bottom: 0,
-    backgroundColor: '#fff',
+    // backgroundColor: '#fff',
+    backgroundColor: '#F3F4F6',
     borderTopWidth: 1,
     borderTopColor: '#eee',
     paddingHorizontal: 12,
@@ -116,7 +117,7 @@ const styles = StyleSheet.create({
     borderColor: '#eee',
     borderRadius: 8,
     padding: 12,
-    backgroundColor: '#fff',
+    // backgroundColor: '#fff',
   },
   toggle: { fontSize: 12, color: '#333' },
   bottomRow: {
