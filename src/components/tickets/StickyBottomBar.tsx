@@ -15,6 +15,7 @@ type Props = {
   hideToggle?: boolean;
   nextLabel?: string;
   fullWidthButton?: boolean;
+  hideTotal?: boolean;
 };
 
 const StickyBottomBar = ({
@@ -30,6 +31,7 @@ const StickyBottomBar = ({
   hideToggle = false,
   nextLabel = 'Next',
   fullWidthButton = false,
+  hideTotal = false,
 }: Props) => {
   return (
     <View style={styles.container}>
@@ -56,22 +58,24 @@ const StickyBottomBar = ({
       <View
         style={[styles.bottomRow, fullWidthButton && { alignItems: 'stretch' }]}
       >
-        <View
-          style={{
-            display: 'flex',
-            flexDirection: 'row',
-            gap: 10,
-            justifyContent: 'center',
-            alignContent: 'center',
-            alignItems: 'center',
-          }}
-        >
-          <View style={{ display: 'flex' }}>
-            <Text style={styles.totalLabel}>{totalLabel}</Text>
-            <Text style={styles.totalTickets}>{totalTickets} tickets</Text>
+        {!hideTotal && (
+          <View
+            style={{
+              display: 'flex',
+              flexDirection: 'row',
+              gap: 10,
+              justifyContent: 'center',
+              alignContent: 'center',
+              alignItems: 'center',
+            }}
+          >
+            <View style={{ display: 'flex' }}>
+              <Text style={styles.totalLabel}>{totalLabel}</Text>
+              <Text style={styles.totalTickets}>{totalTickets} tickets</Text>
+            </View>
+            <Text style={styles.totalValue}>{totalValue}</Text>
           </View>
-          <Text style={styles.totalValue}>{totalValue}</Text>
-        </View>
+        )}
         <TouchableOpacity
           style={[
             styles.primaryBtn,
@@ -121,22 +125,26 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     marginTop: 6,
   },
-  totalLabel: { fontSize: 18, color: '#ef4444', fontWeight: '600' },
+  totalLabel: { fontSize: 16, color: '#ef4444', fontWeight: '600' },
   totalTickets: { fontSize: 12, color: '#ef4444', fontWeight: '600' },
-  totalValue: { fontSize: 18, color: '#ef4444', fontWeight: '600' },
+  totalValue: { fontSize: 16, color: '#ef4444', fontWeight: '600' },
   primaryBtn: {
     backgroundColor: '#ef4444',
-    paddingHorizontal: 14,
+    paddingHorizontal: 30,
     paddingVertical: 10,
     borderRadius: 8,
   },
   primaryBtnFull: {
     flex: 1,
     alignSelf: 'stretch',
-    marginLeft: 12,
     justifyContent: 'center',
   },
-  primaryBtnText: { color: '#fff', fontSize: 12, fontWeight: '700' },
+  primaryBtnText: {
+    color: '#fff',
+    fontSize: 12,
+    fontWeight: '700',
+    textAlign: 'center',
+  },
 });
 
 export default StickyBottomBar;

@@ -28,7 +28,14 @@ const DetailsForm = ({ title, value, onChange, dayLabels = [] }: Props) => {
           <View style={styles.daysRow}>
             {dayLabels.map((d, i) => (
               <View key={`${d}-${i}`} style={styles.dayChip}>
-                <Text style={styles.dayChipText}>{d}</Text>
+                <Text style={styles.dayChipText}>
+                  {dayLabels[i].split(' ')[0] + ' '}
+                  {dayLabels[i].split(' ')[1] + ' '}
+                  <Text style={styles.monthChipText}>
+                    {dayLabels[i].split(' ')[2] + ' '}
+                    {dayLabels[i].split(' ')[3]}
+                  </Text>
+                </Text>
               </View>
             ))}
           </View>
@@ -87,7 +94,13 @@ const styles = StyleSheet.create({
     paddingVertical: 4,
     marginRight: 6,
   },
-  dayChipText: { fontSize: 10, color: '#444', fontWeight: '700' },
+  dayChipText: { fontSize: 10, color: '#ef4444', fontWeight: '700' },
+  monthChipText: {
+    fontSize: 10,
+    color: '#444',
+    fontWeight: '700',
+    fontStyle: 'italic',
+  },
   input: {
     borderWidth: 1,
     borderColor: '#e5e7eb',

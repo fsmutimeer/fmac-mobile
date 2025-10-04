@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React, { useMemo, useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -28,7 +28,13 @@ import TicketEventNameStrip from '../components/tickets/TicketEventNameStrip';
 type Step = 'list' | 'choose' | 'details' | 'payment' | 'done';
 type CreateMode = null | ModalCreateMode;
 
-type BasketItem = { id: string; label: string; qty: number; price: number };
+type BasketItem = {
+  id: string;
+  label: string;
+  qty: number;
+  price: number;
+  selectedDays?: { id: string; label: string; date: string; weekday: string }[];
+};
 
 const TicketsScreen = () => {
   const [step, setStep] = useState<Step>('list');
@@ -41,11 +47,29 @@ const TicketsScreen = () => {
     [basket],
   );
 
-  const [details, setDetails] = useState<TicketDetails[]>([
-    { firstName: '', lastName: '', email: '', contactNumber: '' },
-    { firstName: '', lastName: '', email: '', contactNumber: '' },
-  ]);
+  const [details, setDetails] = useState<TicketDetails[]>([]);
   const [sameForAll, setSameForAll] = useState(false);
+
+  // Update details array when basket changes
+  useEffect(() => {
+    const totalTickets = basket.reduce((sum, item) => sum + item.qty, 0);
+    if (totalTickets > 0) {
+      setDetails(prev => {
+        const newDetails = Array(totalTickets)
+          .fill(null)
+          .map(
+            (_, idx) =>
+              prev[idx] || {
+                firstName: '',
+                lastName: '',
+                email: '',
+                contactNumber: '',
+              },
+          );
+        return newDetails;
+      });
+    }
+  }, [basket]);
   const [payment, setPayment] = useState<PaymentDetails>({
     cardNumber: '',
     cardName: '',
@@ -71,14 +95,26 @@ const TicketsScreen = () => {
   };
 
   const commitCreate = () => {
-    if (!createMode) return;
+    if (!createMode || !selectedEvent) return;
     const label =
       createMode.kind === 'adult' ? 'Adult ticket' : 'Children ticket';
     const price = createMode.kind === 'adult' ? 30 : 10;
     const daysCount = Math.max(1, createMode.selectedDayIds.size);
+
+    // Get the selected days from the event
+    const selectedDays = selectedEvent.days.filter(day =>
+      createMode.selectedDayIds.has(day.id),
+    );
+
     setBasket(prev => [
       ...prev,
-      { id: `${Date.now()}`, label, qty: daysCount, price },
+      {
+        id: `${Date.now()}`,
+        label,
+        qty: daysCount,
+        price,
+        selectedDays,
+      },
     ]);
     setCreateMode(null);
   };
@@ -251,30 +287,44 @@ const TicketsScreen = () => {
             ) : null}
           </TouchableOpacity>
         </View>
-        {details.map((d, idx) => (
-          <DetailsForm
-            key={idx}
-            title={`Adult ticket #${idx + 1}`}
-            dayLabels={[
-              'Day 1 01 Jan',
-              'Day 2 01 Jan',
-              'Day 3 01 Jan',
-              'Day 4 01 Jan',
-            ]}
-            value={d}
-            onChange={next =>
-              setDetails(prev => {
-                const copy = [...prev];
-                copy[idx] = next;
-                if (sameForAll) return copy.map(() => next);
-                return copy;
-              })
+        {details.map((d, idx) => {
+          // Find which basket item this ticket belongs to
+          let currentTicketIndex = 0;
+          let basketItem = null;
+
+          for (const item of basket) {
+            if (idx < currentTicketIndex + item.qty) {
+              basketItem = item;
+              break;
             }
-          />
-        ))}
+            currentTicketIndex += item.qty;
+          }
+
+          const dayLabels =
+            basketItem?.selectedDays?.map(day => `${day.label} ${day.date}`) ||
+            [];
+
+          return (
+            <DetailsForm
+              key={idx}
+              title={`Adult ticket #${idx + 1}`}
+              dayLabels={dayLabels}
+              value={d}
+              onChange={next =>
+                setDetails(prev => {
+                  const copy = [...prev];
+                  copy[idx] = next;
+                  if (sameForAll) return copy.map(() => next);
+                  return copy;
+                })
+              }
+            />
+          );
+        })}
       </ScrollView>
       <StickyBottomBar
         label=""
+        totalTickets={basket.reduce((sum, item) => sum + item.qty, 0)}
         totalLabel="Total"
         totalValue={`$${total.toFixed(2)}`}
         onNext={() => setStep('payment')}
@@ -294,6 +344,7 @@ const TicketsScreen = () => {
       </ScrollView>
       <StickyBottomBar
         label=""
+        totalTickets={basket.reduce((sum, item) => sum + item.qty, 0)}
         totalLabel="Total"
         totalValue={`$${total.toFixed(2)}`}
         nextLabel="Check out"
@@ -323,6 +374,7 @@ const TicketsScreen = () => {
         onNext={() => {}}
         hideToggle
         fullWidthButton
+        hideTotal
       />
     </View>
   );
